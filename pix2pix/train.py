@@ -58,7 +58,7 @@ facades = Facades(opt.dataPath,opt.loadSize,opt.fineSize,opt.flip)
 train_loader = torch.utils.data.DataLoader(dataset=facades,
                                            batch_size=opt.batchSize,
                                            shuffle=True,
-                                           num_workers=2)
+                                           num_workers=0) # num_workers设为0，表示单进程加载数据，避免出错
 
 ###########   MODEL   ###########
 # custom weights initialization called on netG and netD
@@ -167,7 +167,7 @@ for epoch in range(1,opt.niter+1):
         if(i % 50 == 0):
             print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f Loss_L1: %.4f'
                       % (epoch, opt.niter, i, len(train_loader),
-                         errD.data[0], errGAN.data[0], errL1.data[0]))
+                         errD.data.item(), errGAN.data.item(), errL1.data.item()))
 
     ########## Visualize #########
     if(epoch % 5 == 0):
